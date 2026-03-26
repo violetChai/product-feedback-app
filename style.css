@@ -18,6 +18,27 @@ h1 {
   color: #2c3e50;
 }
 
+.app-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+/* sidebar */
+
+.sidebar {
+  background: #1f2937;
+  color: white;
+  padding: 25px;
+  font-weight: 500;
+}
+
+/* main content */
+
+.main-content {
+  padding: 40px;
+}
+
 /* Input section */
 
 form {
