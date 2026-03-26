@@ -78,3 +78,19 @@ select {
   border-radius: 6px;
   border: 1px solid #ccc;
 }
+
+.progress-container {
+  width: 100%;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  height: 12px;
+  margin-top: 6px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 8px;
+  background-color: #4caf50;
+  width: 0%;
+  transition: width 0.3s ease;
+}
