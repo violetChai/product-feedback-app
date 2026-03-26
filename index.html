@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <title>Product Feedback Tool</title>
@@ -12,21 +11,22 @@
 <div class="layout">
 
 <aside class="sidebar">
+
 <h2>Product Tool</h2>
 
 <nav>
-<a href="#">Dashboard</a>
-<a href="#">Roadmap</a>
-<a href="#">Analytics</a>
+<a href="#dashboard">Dashboard</a>
+<a href="#roadmap">Roadmap</a>
+<a href="#analytics">Analytics</a>
 </nav>
 
 </aside>
 
 <main class="main">
 
-<h1>Product Feedback</h1>
+<section id="dashboard">
 
-<div class="controls">
+<h1>Feedback Dashboard</h1>
 
 <select id="filter">
 <option value="all">All</option>
@@ -34,8 +34,6 @@
 <option value="review">Review</option>
 <option value="complete">Complete</option>
 </select>
-
-</div>
 
 <form id="feedback-form">
 
@@ -52,6 +50,25 @@
 </form>
 
 <div id="feedback-list"></div>
+
+</section>
+
+<section id="roadmap">
+
+<h1>Roadmap</h1>
+<p>Features grouped by status.</p>
+
+<div id="roadmap-board"></div>
+
+</section>
+
+<section id="analytics">
+
+<h1>Top Requested Features</h1>
+
+<div id="analytics-list"></div>
+
+</section>
 
 </main>
 
