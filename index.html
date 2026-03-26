@@ -11,7 +11,6 @@
 <div class="layout">
 
 <aside class="sidebar">
-
 <h2>Product Tool</h2>
 
 <nav>
@@ -25,7 +24,6 @@
 <main class="main">
 
 <section id="dashboard">
-
 <h1>Feedback Dashboard</h1>
 
 <select id="filter">
@@ -36,43 +34,29 @@
 </select>
 
 <form id="feedback-form">
-
 <input id="feedback-input" placeholder="Enter feedback..." required>
-
 <select id="priority">
 <option value="low">Low</option>
 <option value="medium">Medium</option>
 <option value="high">High</option>
 </select>
-
 <button>Add</button>
-
 </form>
 
 <div id="feedback-list"></div>
-
 </section>
 
 <section id="roadmap">
-
 <h1>Product Roadmap</h1>
-
 <div class="roadmap-road">
-
-<div class="road-line"></div>
-
-<div id="roadmap-milestones"></div>
-
+  <div class="road-line"></div>
+  <div id="roadmap-milestones"></div>
 </div>
-
 </section>
 
 <section id="analytics">
-
-<h1>Top Requested Features</h1>
-
-<div id="analytics-list"></div>
-
+<h1>Development Progress</h1>
+<canvas id="progressChart" width="600" height="300"></canvas>
 </section>
 
 </main>
