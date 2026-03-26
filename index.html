@@ -9,38 +9,37 @@
 
 <body>
 
-<div class="app">
+<div class="layout">
 
 <aside class="sidebar">
-
 <h2>Product Tool</h2>
 
 <nav>
-<a href="#dashboard">Dashboard</a>
-<a href="#roadmap">Roadmap</a>
-<a href="#analytics">Analytics</a>
-<a href="#portal">Submit Feedback</a>
+<a href="#">Dashboard</a>
+<a href="#">Roadmap</a>
+<a href="#">Analytics</a>
 </nav>
 
 </aside>
 
 <main class="main">
 
-<section id="dashboard">
+<h1>Product Feedback</h1>
 
-<h1>Feedback Dashboard</h1>
+<div class="controls">
 
-<select id="filter-status">
+<select id="filter">
 <option value="all">All</option>
 <option value="in progress">In Progress</option>
 <option value="review">Review</option>
-<option value="demo ready">Demo Ready</option>
 <option value="complete">Complete</option>
 </select>
 
+</div>
+
 <form id="feedback-form">
 
-<input id="feedback-input" placeholder="Enter feedback" required>
+<input id="feedback-input" placeholder="Enter feedback..." required>
 
 <select id="priority">
 <option value="low">Low</option>
@@ -53,52 +52,6 @@
 </form>
 
 <div id="feedback-list"></div>
-
-</section>
-
-<section id="roadmap">
-
-<h1>Roadmap</h1>
-
-<div class="board">
-
-<div class="column" id="todo">
-<h3>To Do</h3>
-</div>
-
-<div class="column" id="progress">
-<h3>In Progress</h3>
-</div>
-
-<div class="column" id="done">
-<h3>Done</h3>
-</div>
-
-</div>
-
-</section>
-
-<section id="analytics">
-
-<h1>Top Requested Features</h1>
-
-<div id="top-features"></div>
-
-</section>
-
-<section id="portal">
-
-<h1>Submit Public Feedback</h1>
-
-<form id="portal-form">
-
-<input id="portal-input" placeholder="Your suggestion" required>
-
-<button>Submit</button>
-
-</form>
-
-</section>
 
 </main>
 
