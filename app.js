@@ -3,12 +3,14 @@ return '_' + Math.random().toString(36).substr(2,9);
 }
 
 function getData(){
-return JSON.parse(localStorage.getItem('feedback')) || [];
+return JSON.parse(localStorage.getItem("feedback"))||[];
 }
 
 function saveData(data){
-localStorage.setItem('feedback',JSON.stringify(data));
+localStorage.setItem("feedback",JSON.stringify(data));
 }
+
+/* LOAD DASHBOARD */
 
 function loadFeedback(){
 
@@ -26,7 +28,12 @@ const list=document.getElementById("feedback-list");
 list.innerHTML="";
 
 data.forEach(addFeedbackToDOM);
+
+loadAnalytics();
+loadRoadmap();
 }
+
+/* CREATE CARD */
 
 function addFeedbackToDOM(f){
 
@@ -34,11 +41,10 @@ const list=document.getElementById("feedback-list");
 
 const card=document.createElement("div");
 card.className="feedback-card";
-card.id=f.id;
 
 card.innerHTML=`
 
-<div><strong>${f.text}</strong></div>
+<strong>${f.text}</strong>
 
 <div class="priority ${f.priority}">
 ${f.priority.toUpperCase()} PRIORITY
@@ -67,8 +73,6 @@ Delete
 
 </div>
 
-<div>Status: <span id="${f.id}-status">${f.status}</span></div>
-
 <div class="progress-container">
 <div class="progress-bar" id="${f.id}-progress"></div>
 </div>
@@ -78,28 +82,27 @@ Delete
 list.appendChild(card);
 
 updateProgressBar(f.id,f.status);
-
 }
+
+/* ADD FEEDBACK */
 
 document.getElementById("feedback-form").addEventListener("submit",e=>{
 
 e.preventDefault();
 
-const text=document.getElementById("feedback-input").value.trim();
+const text=document.getElementById("feedback-input").value;
 const priority=document.getElementById("priority").value;
 
-if(!text)return;
-
-const feedback={
-id:generateID(),
-text:text,
-status:"in progress",
-priority:priority,
-votes:0
-};
-
 const data=getData();
-data.push(feedback);
+
+data.push({
+id:generateID(),
+text,
+priority,
+status:"in progress",
+votes:0
+});
+
 saveData(data);
 
 document.getElementById("feedback-input").value="";
@@ -107,6 +110,8 @@ document.getElementById("feedback-input").value="";
 loadFeedback();
 
 });
+
+/* DELETE */
 
 function deleteFeedback(id){
 
@@ -119,40 +124,39 @@ saveData(data);
 loadFeedback();
 }
 
+/* UPVOTE */
+
 function upvote(id){
 
 let data=getData();
 
 data=data.map(f=>{
-
-if(f.id===id){
-f.votes+=1;
-}
-
-return f;
-
-});
+if(f.id===id){f.votes++}
+return f
+})
 
 saveData(data);
 
 loadFeedback();
 }
+
+/* STATUS */
 
 function updateStatus(id,status){
 
 let data=getData();
 
 data=data.map(f=>{
-if(f.id===id){
-f.status=status;
-}
-return f;
-});
+if(f.id===id){f.status=status}
+return f
+})
 
 saveData(data);
 
 loadFeedback();
 }
+
+/* PROGRESS BAR */
 
 function updateProgressBar(id,status){
 
@@ -170,6 +174,82 @@ case"complete":percent=100;break;
 
 bar.style.width=percent+"%";
 }
+
+/* ANALYTICS */
+
+function loadAnalytics(){
+
+const data=getData().sort((a,b)=>b.votes-a.votes);
+
+const container=document.getElementById("top-features");
+
+container.innerHTML="";
+
+data.slice(0,5).forEach(f=>{
+
+const div=document.createElement("div");
+
+div.innerHTML=`${f.text} — ${f.votes} votes`;
+
+container.appendChild(div);
+
+});
+
+}
+
+/* ROADMAP */
+
+function loadRoadmap(){
+
+const data=getData();
+
+const todo=document.getElementById("todo");
+const progress=document.getElementById("progress");
+const done=document.getElementById("done");
+
+todo.innerHTML="<h3>To Do</h3>";
+progress.innerHTML="<h3>In Progress</h3>";
+done.innerHTML="<h3>Done</h3>";
+
+data.forEach(f=>{
+
+const item=document.createElement("div");
+item.className="roadmap-item";
+item.textContent=f.text;
+
+if(f.status==="complete") done.appendChild(item)
+else if(f.status==="in progress") progress.appendChild(item)
+else todo.appendChild(item)
+
+});
+
+}
+
+/* PUBLIC PORTAL */
+
+document.getElementById("portal-form").addEventListener("submit",e=>{
+
+e.preventDefault();
+
+const text=document.getElementById("portal-input").value;
+
+const data=getData();
+
+data.push({
+id:generateID(),
+text,
+priority:"low",
+status:"in progress",
+votes:0
+});
+
+saveData(data);
+
+alert("Feedback submitted");
+
+});
+
+/* FILTER */
 
 document.getElementById("filter-status").addEventListener("change",loadFeedback);
 
