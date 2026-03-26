@@ -33,9 +33,15 @@ card.innerHTML=`
 
 <strong>${item.text}</strong>
 
+<div>
 <span class="priority ${item.priority}">
 ${item.priority}
 </span>
+
+<span class="status ${statusClass(item.status)}">
+${item.status}
+</span>
+</div>
 
 </div>
 
@@ -69,6 +75,9 @@ list.appendChild(card);
 
 });
 
+renderRoadmap();
+renderAnalytics();
+
 }
 
 function progress(status){
@@ -77,6 +86,16 @@ switch(status){
 case"in progress":return 30;
 case"review":return 60;
 case"complete":return 100;
+}
+
+}
+
+function statusClass(status){
+
+switch(status){
+case"in progress":return"inprogress";
+case"review":return"review";
+case"complete":return"complete";
 }
 
 }
@@ -92,8 +111,8 @@ const data=getData();
 
 data.push({
 id:Date.now(),
-text:text,
-priority:priority,
+text,
+priority,
 status:"in progress",
 votes:0
 });
@@ -145,6 +164,45 @@ return f;
 saveData(data);
 
 render();
+
+}
+
+function renderRoadmap(){
+
+const board=document.getElementById("roadmap-board");
+board.innerHTML="";
+
+const data=getData();
+
+data.forEach(f=>{
+
+const item=document.createElement("div");
+item.className="roadmap-item";
+
+item.innerText=`${f.text} (${f.status})`;
+
+board.appendChild(item);
+
+});
+
+}
+
+function renderAnalytics(){
+
+const container=document.getElementById("analytics-list");
+container.innerHTML="";
+
+const data=getData().sort((a,b)=>b.votes-a.votes).slice(0,5);
+
+data.forEach(f=>{
+
+const item=document.createElement("div");
+
+item.innerText=`${f.text} — ${f.votes} votes`;
+
+container.appendChild(item);
+
+});
 
 }
 
