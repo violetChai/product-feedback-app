@@ -1,117 +1,176 @@
-function generateID() {
-  return '_' + Math.random().toString(36).substr(2, 9);
+function generateID(){
+return '_' + Math.random().toString(36).substr(2,9);
 }
 
-function loadFeedback() {
-  const data = JSON.parse(localStorage.getItem('feedback')) || [];
-  const list = document.getElementById('feedback-list');
-  list.innerHTML = '';
-  data.forEach(addFeedbackToDOM);
+function getData(){
+return JSON.parse(localStorage.getItem('feedback')) || [];
 }
 
-function addFeedbackToDOM(feedback) {
-
-  const list = document.getElementById('feedback-list');
-
-  const card = document.createElement('div');
-  card.className = 'feedback-card';
-  card.id = feedback.id;
-
-  card.innerHTML = `
-    <div class="feedback-text">${feedback.text}</div>
-
-    <div class="feedback-actions">
-      <select onchange="updateStatus('${feedback.id}', this.value)">
-        <option value="in progress" ${feedback.status === 'in progress' ? 'selected' : ''}>In Progress</option>
-        <option value="review" ${feedback.status === 'review' ? 'selected' : ''}>Review</option>
-        <option value="demo ready" ${feedback.status === 'demo ready' ? 'selected' : ''}>Demo Ready</option>
-        <option value="complete" ${feedback.status === 'complete' ? 'selected' : ''}>Complete</option>
-      </select>
-
-      <button class="delete-btn" onclick="deleteFeedback('${feedback.id}')">
-        Delete
-      </button>
-    </div>
-
-    <div class="status-text">
-      Status: <span id="${feedback.id}-status">${feedback.status}</span>
-    </div>
-
-    <div class="progress-container">
-      <div class="progress-bar" id="${feedback.id}-progress"></div>
-    </div>
-  `;
-
-  list.appendChild(card);
-  updateProgressBar(feedback.id, feedback.status);
+function saveData(data){
+localStorage.setItem('feedback',JSON.stringify(data));
 }
 
-document.getElementById('feedback-form').addEventListener('submit', e => {
+function loadFeedback(){
 
-  e.preventDefault();
+let data=getData();
 
-  const input = document.getElementById('feedback-input');
-  const text = input.value.trim();
+const filter=document.getElementById("filter-status").value;
 
-  if (!text) return;
+if(filter!=="all"){
+data=data.filter(f=>f.status===filter);
+}
 
-  const feedback = {
-    id: generateID(),
-    text: text,
-    status: 'in progress'
-  };
+data.sort((a,b)=>b.votes-a.votes);
 
-  const data = JSON.parse(localStorage.getItem('feedback')) || [];
-  data.push(feedback);
-  localStorage.setItem('feedback', JSON.stringify(data));
+const list=document.getElementById("feedback-list");
+list.innerHTML="";
 
-  addFeedbackToDOM(feedback);
-  input.value = '';
+data.forEach(addFeedbackToDOM);
+}
+
+function addFeedbackToDOM(f){
+
+const list=document.getElementById("feedback-list");
+
+const card=document.createElement("div");
+card.className="feedback-card";
+card.id=f.id;
+
+card.innerHTML=`
+
+<div><strong>${f.text}</strong></div>
+
+<div class="priority ${f.priority}">
+${f.priority.toUpperCase()} PRIORITY
+</div>
+
+<div class="feedback-actions">
+
+<select onchange="updateStatus('${f.id}',this.value)">
+<option value="in progress" ${f.status==="in progress"?'selected':''}>In Progress</option>
+<option value="review" ${f.status==="review"?'selected':''}>Review</option>
+<option value="demo ready" ${f.status==="demo ready"?'selected':''}>Demo Ready</option>
+<option value="complete" ${f.status==="complete"?'selected':''}>Complete</option>
+</select>
+
+<div>
+
+<button class="vote" onclick="upvote('${f.id}')">
+👍 ${f.votes}
+</button>
+
+<button class="delete-btn" onclick="deleteFeedback('${f.id}')">
+Delete
+</button>
+
+</div>
+
+</div>
+
+<div>Status: <span id="${f.id}-status">${f.status}</span></div>
+
+<div class="progress-container">
+<div class="progress-bar" id="${f.id}-progress"></div>
+</div>
+
+`;
+
+list.appendChild(card);
+
+updateProgressBar(f.id,f.status);
+
+}
+
+document.getElementById("feedback-form").addEventListener("submit",e=>{
+
+e.preventDefault();
+
+const text=document.getElementById("feedback-input").value.trim();
+const priority=document.getElementById("priority").value;
+
+if(!text)return;
+
+const feedback={
+id:generateID(),
+text:text,
+status:"in progress",
+priority:priority,
+votes:0
+};
+
+const data=getData();
+data.push(feedback);
+saveData(data);
+
+document.getElementById("feedback-input").value="";
+
+loadFeedback();
+
 });
 
-function deleteFeedback(id) {
+function deleteFeedback(id){
 
-  const element = document.getElementById(id);
-  if (element) element.remove();
+let data=getData();
 
-  let data = JSON.parse(localStorage.getItem('feedback')) || [];
-  data = data.filter(f => f.id !== id);
+data=data.filter(f=>f.id!==id);
 
-  localStorage.setItem('feedback', JSON.stringify(data));
+saveData(data);
+
+loadFeedback();
 }
 
-function updateStatus(id, status) {
+function upvote(id){
 
-  let data = JSON.parse(localStorage.getItem('feedback')) || [];
+let data=getData();
 
-  data = data.map(f =>
-    f.id === id ? { ...f, status } : f
-  );
+data=data.map(f=>{
 
-  localStorage.setItem('feedback', JSON.stringify(data));
-
-  document.getElementById(`${id}-status`).innerText = status;
-
-  updateProgressBar(id, status);
+if(f.id===id){
+f.votes+=1;
 }
 
-function updateProgressBar(id, status) {
+return f;
 
-  const bar = document.getElementById(`${id}-progress`);
-  if (!bar) return;
+});
 
-  let percent = 0;
-  let color = '#4caf50';
+saveData(data);
 
-  switch(status) {
-    case 'in progress': percent = 25; color = '#2196f3'; break;
-    case 'review': percent = 50; color = '#ff9800'; break;
-    case 'demo ready': percent = 75; color = '#9c27b0'; break;
-    case 'complete': percent = 100; color = '#4caf50'; break;
-  }
-
-  bar.style.width = percent + '%';
-  bar.style.backgroundColor = color;
+loadFeedback();
 }
+
+function updateStatus(id,status){
+
+let data=getData();
+
+data=data.map(f=>{
+if(f.id===id){
+f.status=status;
+}
+return f;
+});
+
+saveData(data);
+
+loadFeedback();
+}
+
+function updateProgressBar(id,status){
+
+const bar=document.getElementById(`${id}-progress`);
+if(!bar)return;
+
+let percent=0;
+
+switch(status){
+case"in progress":percent=25;break;
+case"review":percent=50;break;
+case"demo ready":percent=75;break;
+case"complete":percent=100;break;
+}
+
+bar.style.width=percent+"%";
+}
+
+document.getElementById("filter-status").addEventListener("change",loadFeedback);
 
 loadFeedback();
