@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product Feedback Dashboard</title>
+<title>Feedback Dashboard</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,17 +11,19 @@
 <div class="app">
 
 <aside class="sidebar">
-<h2>Feedback</h2>
-<p>Dashboard</p>
-<p>Requests</p>
-<p>Completed</p>
+
+<h2>Product Tool</h2>
+
+<a href="index.html">Dashboard</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="analytics.html">Analytics</a>
+<a href="portal.html">Public Portal</a>
+
 </aside>
 
 <main class="main">
 
-<h1>Product Feedback</h1>
-
-<div class="controls">
+<h1>Product Feedback Dashboard</h1>
 
 <select id="filter-status">
 <option value="all">All</option>
@@ -32,23 +33,21 @@
 <option value="complete">Complete</option>
 </select>
 
-</div>
-
 <form id="feedback-form">
 
-<input id="feedback-input" type="text" placeholder="Enter feedback..." required>
+<input id="feedback-input" placeholder="Enter feedback">
 
 <select id="priority">
-<option value="low">Low Priority</option>
-<option value="medium">Medium Priority</option>
-<option value="high">High Priority</option>
+<option value="low">Low</option>
+<option value="medium">Medium</option>
+<option value="high">High</option>
 </select>
 
-<button type="submit">Add</button>
+<button>Add</button>
 
 </form>
 
-<section id="feedback-list"></section>
+<div id="feedback-list"></div>
 
 </main>
 
