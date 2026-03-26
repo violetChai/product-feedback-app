@@ -1,110 +1,102 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #f3f4f6;
-  background-color: #f4f6f9;
   margin: 0;
-  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f4f6f9;
 }
 
-.container {
-  width: 90%;
-  max-width: 1400px;
-  margin: 60px auto;
-  padding: 30px;
-}
+/* App Layout */
 
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #2c3e50;
-}
-
-.app-layout {
+.app {
   display: grid;
   grid-template-columns: 220px 1fr;
   min-height: 100vh;
 }
 
-/* sidebar */
+/* Sidebar */
 
 .sidebar {
   background: #1f2937;
   color: white;
   padding: 25px;
-  font-weight: 500;
 }
 
-/* main content */
+.sidebar h2 {
+  margin-top: 0;
+}
 
-.main-content {
+.sidebar p {
+  opacity: 0.8;
+}
+
+/* Main Area */
+
+.main {
   padding: 40px;
 }
 
-/* Input section */
+/* Header */
 
-form {
-  display: flex;
-  gap: 10px;
+.header {
+  margin-bottom: 25px;
+}
+
+/* Input */
+
+.input-area {
   margin-bottom: 30px;
 }
 
-input[type="text"] {
+#feedback-form {
+  display: flex;
+  gap: 10px;
+}
+
+#feedback-input {
   flex: 1;
   padding: 12px;
   border-radius: 8px;
   border: 1px solid #ddd;
-  font-size: 15px;
 }
 
 button {
   padding: 12px 18px;
   border: none;
-  background-color: #4caf50;
+  background: #4caf50;
   color: white;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
 }
 
 button:hover {
-  background-color: #43a047;
+  background: #43a047;
 }
 
-/* Feedback grid */
+/* Feedback list */
 
 #feedback-list {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 /* Card */
 
 .feedback-card {
-  width: 100%
   background: white;
   padding: 18px;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  gap: 12px;
 }
-
-.feedback-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(0,0,0,0.12);
-}
-
-/* Feedback text */
 
 .feedback-text {
   font-size: 15px;
   color: #333;
 }
 
-/* Actions row */
+/* Actions */
 
 .feedback-actions {
   display: flex;
@@ -112,37 +104,27 @@ button:hover {
   align-items: center;
 }
 
-/* Status dropdown */
-
 select {
-  padding: 6px 8px;
+  padding: 6px;
   border-radius: 6px;
-  border: 1px solid #ccc;
 }
-
-/* Delete button */
 
 .delete-btn {
   background: #e53935;
-  padding: 6px 10px;
-  font-size: 13px;
 }
 
 .delete-btn:hover {
   background: #c62828;
 }
 
-/* Status label */
-
 .status-text {
   font-size: 13px;
-  color: #777;
+  color: #666;
 }
 
-/* Progress bar */
+/* Progress */
 
 .progress-container {
-  width: 100%;
   height: 10px;
   background: #e6e6e6;
   border-radius: 6px;
@@ -152,6 +134,5 @@ select {
 .progress-bar {
   height: 100%;
   width: 0%;
-  border-radius: 6px;
-  transition: width 0.35s ease;
+  transition: width 0.3s ease;
 }
