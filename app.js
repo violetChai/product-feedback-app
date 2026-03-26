@@ -31,9 +31,13 @@ function addFeedbackToDOM(feedback) {
       <button onclick="deleteFeedback('${feedback.id}')">Delete</button>
     </div>
     <small>Status: <span id="${feedback.id}-status">${feedback.status}</span></small>
+    <div class="progress-container">
+      <div class="progress-bar" id="${feedback.id}-progress"></div>
+    </div>
   `;
 
   feedbackList.appendChild(card);
+  updateProgressBar(feedback.id, feedback.status);
 }
 
 // Add feedback to localStorage and DOM
@@ -69,6 +73,25 @@ function updateStatus(id, status) {
   localStorage.setItem('feedback', JSON.stringify(feedbackData));
 
   document.getElementById(`${id}-status`).innerText = status;
+  updateProgressBar(id, status);
+}
+
+// Update the progress bar based on status
+function updateProgressBar(id, status) {
+  const progressBar = document.getElementById(`${id}-progress`);
+  if (!progressBar) return;
+
+  let percent = 0;
+  let color = '#4caf50'; // default green
+  switch(status) {
+    case 'in progress': percent = 25; color = '#2196f3'; break;       // blue
+    case 'review': percent = 50; color = '#ff9800'; break;            // orange
+    case 'demo ready': percent = 75; color = '#9c27b0'; break;        // purple
+    case 'complete': percent = 100; color = '#4caf50'; break;         // green
+  }
+
+  progressBar.style.width = percent + '%';
+  progressBar.style.backgroundColor = color;
 }
 
 // Initialize
