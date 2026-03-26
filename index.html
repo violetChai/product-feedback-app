@@ -11,31 +11,46 @@
 
 <div class="app">
 
-  <aside class="sidebar">
-    <h2>Feedback</h2>
-    <nav>
-      <p>Dashboard</p>
-      <p>Requests</p>
-      <p>Completed</p>
-    </nav>
-  </aside>
+<aside class="sidebar">
+<h2>Feedback</h2>
+<p>Dashboard</p>
+<p>Requests</p>
+<p>Completed</p>
+</aside>
 
-  <main class="main">
+<main class="main">
 
-    <header class="header">
-      <h1>Product Feedback</h1>
-    </header>
+<h1>Product Feedback</h1>
 
-    <section class="input-area">
-      <form id="feedback-form">
-        <input id="feedback-input" type="text" placeholder="Enter feedback..." required>
-        <button type="submit">Add Feedback</button>
-      </form>
-    </section>
+<div class="controls">
 
-    <section id="feedback-list"></section>
+<select id="filter-status">
+<option value="all">All</option>
+<option value="in progress">In Progress</option>
+<option value="review">Review</option>
+<option value="demo ready">Demo Ready</option>
+<option value="complete">Complete</option>
+</select>
 
-  </main>
+</div>
+
+<form id="feedback-form">
+
+<input id="feedback-input" type="text" placeholder="Enter feedback..." required>
+
+<select id="priority">
+<option value="low">Low Priority</option>
+<option value="medium">Medium Priority</option>
+<option value="high">High Priority</option>
+</select>
+
+<button type="submit">Add</button>
+
+</form>
+
+<section id="feedback-list"></section>
+
+</main>
 
 </div>
 
