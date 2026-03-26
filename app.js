@@ -1,22 +1,16 @@
-function generateID(){
-return '_' + Math.random().toString(36).substr(2,9);
-}
-
 function getData(){
-return JSON.parse(localStorage.getItem("feedback"))||[];
+return JSON.parse(localStorage.getItem("feedback")) || [];
 }
 
 function saveData(data){
 localStorage.setItem("feedback",JSON.stringify(data));
 }
 
-/* LOAD DASHBOARD */
-
-function loadFeedback(){
+function render(){
 
 let data=getData();
 
-const filter=document.getElementById("filter-status").value;
+const filter=document.getElementById("filter").value;
 
 if(filter!=="all"){
 data=data.filter(f=>f.status===filter);
@@ -25,66 +19,67 @@ data=data.filter(f=>f.status===filter);
 data.sort((a,b)=>b.votes-a.votes);
 
 const list=document.getElementById("feedback-list");
+
 list.innerHTML="";
 
-data.forEach(addFeedbackToDOM);
-
-loadAnalytics();
-loadRoadmap();
-}
-
-/* CREATE CARD */
-
-function addFeedbackToDOM(f){
-
-const list=document.getElementById("feedback-list");
+data.forEach(item=>{
 
 const card=document.createElement("div");
-card.className="feedback-card";
+card.className="card";
 
 card.innerHTML=`
 
-<strong>${f.text}</strong>
+<div class="card-header">
 
-<div class="priority ${f.priority}">
-${f.priority.toUpperCase()} PRIORITY
+<strong>${item.text}</strong>
+
+<span class="priority ${item.priority}">
+${item.priority}
+</span>
+
 </div>
 
-<div class="feedback-actions">
+<select onchange="changeStatus('${item.id}',this.value)">
 
-<select onchange="updateStatus('${f.id}',this.value)">
-<option value="in progress" ${f.status==="in progress"?'selected':''}>In Progress</option>
-<option value="review" ${f.status==="review"?'selected':''}>Review</option>
-<option value="demo ready" ${f.status==="demo ready"?'selected':''}>Demo Ready</option>
-<option value="complete" ${f.status==="complete"?'selected':''}>Complete</option>
+<option value="in progress" ${item.status==="in progress"?'selected':''}>In Progress</option>
+<option value="review" ${item.status==="review"?'selected':''}>Review</option>
+<option value="complete" ${item.status==="complete"?'selected':''}>Complete</option>
+
 </select>
 
-<div>
+<div class="actions">
 
-<button class="vote" onclick="upvote('${f.id}')">
-👍 ${f.votes}
+<button class="vote" onclick="vote('${item.id}')">
+👍 ${item.votes}
 </button>
 
-<button class="delete-btn" onclick="deleteFeedback('${f.id}')">
+<button class="delete" onclick="removeItem('${item.id}')">
 Delete
 </button>
 
 </div>
 
-</div>
-
-<div class="progress-container">
-<div class="progress-bar" id="${f.id}-progress"></div>
+<div class="progress">
+<div class="bar" style="width:${progress(item.status)}%"></div>
 </div>
 
 `;
 
 list.appendChild(card);
 
-updateProgressBar(f.id,f.status);
+});
+
 }
 
-/* ADD FEEDBACK */
+function progress(status){
+
+switch(status){
+case"in progress":return 30;
+case"review":return 60;
+case"complete":return 100;
+}
+
+}
 
 document.getElementById("feedback-form").addEventListener("submit",e=>{
 
@@ -96,9 +91,9 @@ const priority=document.getElementById("priority").value;
 const data=getData();
 
 data.push({
-id:generateID(),
-text,
-priority,
+id:Date.now(),
+text:text,
+priority:priority,
 status:"in progress",
 votes:0
 });
@@ -107,150 +102,52 @@ saveData(data);
 
 document.getElementById("feedback-input").value="";
 
-loadFeedback();
+render();
 
 });
 
-/* DELETE */
-
-function deleteFeedback(id){
-
-let data=getData();
-
-data=data.filter(f=>f.id!==id);
-
-saveData(data);
-
-loadFeedback();
-}
-
-/* UPVOTE */
-
-function upvote(id){
+function vote(id){
 
 let data=getData();
 
 data=data.map(f=>{
-if(f.id===id){f.votes++}
-return f
-})
+if(f.id==id)f.votes++;
+return f;
+});
 
 saveData(data);
 
-loadFeedback();
+render();
+
 }
 
-/* STATUS */
+function removeItem(id){
 
-function updateStatus(id,status){
+let data=getData();
+
+data=data.filter(f=>f.id!=id);
+
+saveData(data);
+
+render();
+
+}
+
+function changeStatus(id,status){
 
 let data=getData();
 
 data=data.map(f=>{
-if(f.id===id){f.status=status}
-return f
-})
-
-saveData(data);
-
-loadFeedback();
-}
-
-/* PROGRESS BAR */
-
-function updateProgressBar(id,status){
-
-const bar=document.getElementById(`${id}-progress`);
-if(!bar)return;
-
-let percent=0;
-
-switch(status){
-case"in progress":percent=25;break;
-case"review":percent=50;break;
-case"demo ready":percent=75;break;
-case"complete":percent=100;break;
-}
-
-bar.style.width=percent+"%";
-}
-
-/* ANALYTICS */
-
-function loadAnalytics(){
-
-const data=getData().sort((a,b)=>b.votes-a.votes);
-
-const container=document.getElementById("top-features");
-
-container.innerHTML="";
-
-data.slice(0,5).forEach(f=>{
-
-const div=document.createElement("div");
-
-div.innerHTML=`${f.text} — ${f.votes} votes`;
-
-container.appendChild(div);
-
-});
-
-}
-
-/* ROADMAP */
-
-function loadRoadmap(){
-
-const data=getData();
-
-const todo=document.getElementById("todo");
-const progress=document.getElementById("progress");
-const done=document.getElementById("done");
-
-todo.innerHTML="<h3>To Do</h3>";
-progress.innerHTML="<h3>In Progress</h3>";
-done.innerHTML="<h3>Done</h3>";
-
-data.forEach(f=>{
-
-const item=document.createElement("div");
-item.className="roadmap-item";
-item.textContent=f.text;
-
-if(f.status==="complete") done.appendChild(item)
-else if(f.status==="in progress") progress.appendChild(item)
-else todo.appendChild(item)
-
-});
-
-}
-
-/* PUBLIC PORTAL */
-
-document.getElementById("portal-form").addEventListener("submit",e=>{
-
-e.preventDefault();
-
-const text=document.getElementById("portal-input").value;
-
-const data=getData();
-
-data.push({
-id:generateID(),
-text,
-priority:"low",
-status:"in progress",
-votes:0
+if(f.id==id)f.status=status;
+return f;
 });
 
 saveData(data);
 
-alert("Feedback submitted");
+render();
 
-});
+}
 
-/* FILTER */
+document.getElementById("filter").addEventListener("change",render);
 
-document.getElementById("filter-status").addEventListener("change",loadFeedback);
-
-loadFeedback();
+render();
