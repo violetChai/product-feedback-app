@@ -1,31 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Feedback Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
 <body>
 
-<div class="app-layout">
+<div class="app">
 
-  <div class="sidebar">
+  <aside class="sidebar">
     <h2>Feedback</h2>
-    <p>Dashboard</p>
-    <p>Requests</p>
-    <p>Completed</p>
-  </div>
+    <nav>
+      <p>Dashboard</p>
+      <p>Requests</p>
+      <p>Completed</p>
+    </nav>
+  </aside>
 
-  <div class="main-content">
+  <main class="main">
 
-    <div class="container">
+    <header class="header">
       <h1>Product Feedback</h1>
+    </header>
 
+    <section class="input-area">
       <form id="feedback-form">
-        <input type="text" id="feedback-input" placeholder="Enter feedback..." required>
+        <input id="feedback-input" type="text" placeholder="Enter feedback..." required>
         <button type="submit">Add Feedback</button>
       </form>
+    </section>
 
-      <div id="feedback-list"></div>
-    </div>
+    <section id="feedback-list"></section>
 
-  </div>
+  </main>
 
 </div>
 
 <script src="app.js"></script>
 
 </body>
+</html>
