@@ -20,22 +20,30 @@ function addFeedbackToDOM(feedback) {
   card.id = feedback.id;
 
   card.innerHTML = `
-    <p>${feedback.text}</p>
-    <div class="feedback-actions">
-      <select onchange="updateStatus('${feedback.id}', this.value)">
-        <option value="in progress" ${feedback.status === 'in progress' ? 'selected' : ''}>In Progress</option>
-        <option value="review" ${feedback.status === 'review' ? 'selected' : ''}>Review</option>
-        <option value="demo ready" ${feedback.status === 'demo ready' ? 'selected' : ''}>Demo Ready</option>
-        <option value="complete" ${feedback.status === 'complete' ? 'selected' : ''}>Complete</option>
-      </select>
-      <button onclick="deleteFeedback('${feedback.id}')">Delete</button>
-    </div>
-    <small>Status: <span id="${feedback.id}-status">${feedback.status}</span></small>
-    <div class="progress-container">
-      <div class="progress-bar" id="${feedback.id}-progress"></div>
-    </div>
-  `;
+  <div class="feedback-text">${feedback.text}</div>
 
+  <div class="feedback-actions">
+    <select onchange="updateStatus('${feedback.id}', this.value)">
+      <option value="in progress" ${feedback.status === 'in progress' ? 'selected' : ''}>In Progress</option>
+      <option value="review" ${feedback.status === 'review' ? 'selected' : ''}>Review</option>
+      <option value="demo ready" ${feedback.status === 'demo ready' ? 'selected' : ''}>Demo Ready</option>
+      <option value="complete" ${feedback.status === 'complete' ? 'selected' : ''}>Complete</option>
+    </select>
+
+    <button class="delete-btn" onclick="deleteFeedback('${feedback.id}')">
+      Delete
+    </button>
+  </div>
+
+  <div class="status-text">
+    Status: <span id="${feedback.id}-status">${feedback.status}</span>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="${feedback.id}-progress"></div>
+  </div>
+`;
+  
   feedbackList.appendChild(card);
   updateProgressBar(feedback.id, feedback.status);
 }
